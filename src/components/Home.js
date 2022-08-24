@@ -1,5 +1,4 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import FeaturedProductChart from './FeaturedProductChart'
 
 
@@ -10,6 +9,7 @@ function Home() {
             <div className="w-full">
                 <h2 className="text-2xl tracking-widest mb-5">OUR FEATURED PRODUCTS</h2>
 
+                {/* Chart with full width */}
                 <div className='w-full'>
                     <FeaturedProductChart />
                 </div>

@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { Line } from "react-chartjs-2"
-import { Chart as ChartJS, LinearScale, CategoryScale, LineElement, PointElement } from "chart.js"
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, LinearScale, CategoryScale, LineElement, PointElement } from "chart.js";
+import axios from 'axios';
 
 ChartJS.register(
     LinearScale,
     CategoryScale,
     LineElement,
     PointElement,
-)
+);
 
 
 function FeaturedProductChart() {
 
-    const [productsStock, setProductsStock] = useState([])
+    // declaring states
+    const [productsStock, setProductsStock] = useState([]);
 
+    // to get the array of stocks of products
     const getProductsStock = async () => {
 
         await axios.get("https://assessment.api.vweb.app/products").then((res) => {
@@ -28,6 +30,7 @@ function FeaturedProductChart() {
         getProductsStock()
     }, [])
 
+    // declare datasets for chart
     const data = {
         labels: Array.from({ length: productsStock.length }, (_, i) => i + 1),
         datasets: [{
@@ -42,6 +45,7 @@ function FeaturedProductChart() {
         }]
     }
 
+    // properties for chart
     const options = {
         maintainAspectRatio: false,
         responsive: true,

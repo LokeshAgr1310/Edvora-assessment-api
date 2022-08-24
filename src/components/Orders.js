@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import OrderChart from './OrderChart';
 
 function Orders() {
 
+    // define react-toastify property
     const toastPropertyProps = {
         position: "bottom-center",
         autoClose: 3500,
@@ -17,51 +18,69 @@ function Orders() {
         progress: undefined,
     }
 
+    // declare states...
     const [id, setId] = useState("")
     const [orderDetails, setOrderDetails] = useState({})
     const [checkLoading, setCheckLoading] = useState(false)
     const [randomLoading, setRandomLoading] = useState(false)
 
+    // form handler for
+    // getting orders details
     const getDetailsFormHandler = async (e) => {
         e.preventDefault()
 
         if (id.length === 0) {
-            toast.info("Please enter the product id!", toastPropertyProps)
+            toast.info("Please enter the order id!", toastPropertyProps)
         }
         else {
             setCheckLoading(true)
             await axios.get("https://assessment.api.vweb.app/orders").then(async (res) => {
-                const orderData = res.data[parseInt(id) - 1]
 
-                const { data: productData } = await axios.get("https://assessment.api.vweb.app/products")
-                const { data: userData } = await axios.get("https://assessment.api.vweb.app/users")
+                const orders = res.data
 
-                const orderedProductDetails = productData[orderData.product_id - 1]
+                // validate the id within the
+                // orders array length
+                if (parseInt(id) <= orders.length) {
 
-                const userDetails = userData[orderData.user_id - 1]
+                    const orderData = orders[parseInt(id) - 1]
 
-                if (parseInt(id) <= res.data.length) {
+                    const { data: productData } = await axios.get("https://assessment.api.vweb.app/products")
+                    const { data: userData } = await axios.get("https://assessment.api.vweb.app/users")
+
+                    const orderedProductDetails = productData[orderData.product_id - 1]
+
+                    const userDetails = userData[orderData.user_id - 1]
+
+                    // set the orders details
+                    // along with user and product
                     setOrderDetails({
                         ...orderData,
                         "product_name": orderedProductDetails?.name,
                         "product_price": orderedProductDetails?.selling_price,
                         "user_name": userDetails?.name
                     })
+
                 } else {
+                    setId("")
                     toast.error("No details found!", toastPropertyProps)
                 }
 
                 setCheckLoading(false)
-            }).catch(err => {
-                console.log("error")
+            }).catch((err) => {
+                setId("")
                 toast.error(err, toastPropertyProps)
             })
         }
     }
 
+    // get random orders
     const randomProductsDetails = async () => {
+
         setRandomLoading(true)
         await axios.get("https://assessment.api.vweb.app/orders").then(async (res) => {
+
+            // generate random numbers b/w 
+            // 0 and response length
             const randomNum = Math.floor(Math.random() * res?.data?.length)
             const orderData = res.data[randomNum]
 
@@ -93,6 +112,8 @@ function Orders() {
             }}
         >
             <div className="grid grid-cols-5 h-full items-center">
+
+                {/* Left side - form & order details */}
                 <div className="mt-5 p-5 col-span-2 flex flex-col">
                     <h1 className="text-2xl tracking-widest mb-4 leading-relaxed">
                         GET DETAILS OF ORDERS <br /> WITH TEST API
@@ -185,6 +206,8 @@ function Orders() {
                         )
                     }
                 </div>
+
+                {/* Right side - Show orders graph */}
                 <div className='col-span-3 ml-8 my-auto'>
                     <h2 className="text-2xl mb-5 tracking-widest">ORDERS ANALYTICS</h2>
                     <OrderChart />

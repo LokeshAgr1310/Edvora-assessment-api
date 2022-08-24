@@ -12,10 +12,13 @@ ChartJS.register(
 
 function OrderChart() {
 
+    // declare states
     const [userOrderFrequency, setUserOrderFrequency] = useState([]);
 
+    // array from 1 to 10 i.e [1,2,3,...10]
     const userId = Array.from({ length: 10 }, (_, i) => i + 1)
 
+    // get the how many orders made by users (frequency) and set to the state
     const getUserOrderFrequency = async () => {
 
         await axios.get("https://assessment.api.vweb.app/orders").then((res) => {
@@ -24,6 +27,10 @@ function OrderChart() {
 
             const userFrequency = []
 
+            // filtering the orders having 
+            // particular user_id and get the length
+            // of the array formed to 
+            // get the frequency
             userId.forEach((id) => {
                 userFrequency.push(orders.filter((order) => order.user_id === id).length)
             })
@@ -37,6 +44,7 @@ function OrderChart() {
     }, [])
 
 
+    // define datasets for the chart
     const data = {
         labels: userId,
         datasets: [{
@@ -51,12 +59,10 @@ function OrderChart() {
         }]
     }
 
+    // define properties for the chart 
     const options = {
         maintainAspectRatio: false,
         responsive: true,
-        onHover: (e) => {
-            console.log("event", e)
-        },
         scales: {
             y: {
                 title: {

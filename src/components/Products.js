@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import ProductChart from './ProductChart';
 
 function Products() {
 
+    // define react-toastify property
     const toastPropertyProps = {
         position: "bottom-center",
         autoClose: 3500,
@@ -17,11 +18,14 @@ function Products() {
         progress: undefined,
     }
 
+    // declare states...
     const [id, setId] = useState("")
     const [productDetails, setProductDetails] = useState({})
     const [checkLoading, setCheckLoading] = useState(false)
     const [randomLoading, setRandomLoading] = useState(false)
 
+    // form handler for
+    // getting products details
     const getDetailsFormHandler = async (e) => {
         e.preventDefault()
 
@@ -31,25 +35,33 @@ function Products() {
         else {
             setCheckLoading(true)
             await axios.get("https://assessment.api.vweb.app/products").then((res) => {
-                const data = res.data
-                if (parseInt(id) <= data.length) {
-                    setProductDetails(data[parseInt(id) - 1])
+                const products = res.data
+
+                // validate the id within the
+                // products array length
+                if (parseInt(id) <= products.length) {
+                    setProductDetails(products[parseInt(id) - 1])
                 } else {
+                    setId("")
                     toast.error("No details found!", toastPropertyProps)
                 }
 
                 setCheckLoading(false)
-            }).catch(err => {
+            }).catch((err) => {
+                setId("")
                 toast.error(err, toastPropertyProps)
             })
         }
     }
 
+    // get random products
     const randomProductsDetails = async () => {
         setRandomLoading(true)
         await axios.get("https://assessment.api.vweb.app/products").then((res) => {
             const data = res.data
 
+            // generate random numbers b/w 
+            // 0 and response length
             const randomNum = Math.floor(Math.random() * data?.length)
 
             setProductDetails(data[randomNum])
@@ -67,6 +79,7 @@ function Products() {
             }}
         >
             <div className="grid grid-cols-5 h-full items-center">
+                {/* Left side - form & product details */}
                 <div className="mt-4 p-5 col-span-2 flex flex-col">
                     <h1 className="text-2xl tracking-widest mb-4 leading-relaxed">
                         GET DETAILS OF PRODUCTS <br /> WITH TEST API
@@ -160,6 +173,7 @@ function Products() {
                     }
                 </div>
 
+                {/* Right side - Show products graph */}
                 <div className='col-span-3 ml-8 my-auto'>
                     <h2 className="text-2xl mb-5 tracking-widest">PRODUCTS PRICE DISTRIBUTUION</h2>
                     <ProductChart />

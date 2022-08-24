@@ -15,6 +15,7 @@ function App() {
             <Header />
           </header>
 
+          {/* routes components */}
           <Routes>
 
             <Route exact path='/products' element={<Products />} />

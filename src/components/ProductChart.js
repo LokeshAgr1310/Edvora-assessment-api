@@ -11,18 +11,25 @@ ChartJS.register(
 
 function ProductChart() {
 
+    // declare states
     const [productPriceRange, setProductPriceRange] = useState([]);
 
+    // to set the state with array of
+    // price-range i.e. <=50
     const getProductPriceData = async () => {
 
         await axios.get("https://assessment.api.vweb.app/products").then((res) => {
 
             const products = res.data;
+
+            // declare variable to store count of price-range
             let lessThan50 = 0;
             let greaterThan50OrlessThan100 = 0;
             let greaterThan100OrlessThan150 = 0;
             let greaterThan150OrlessThan200 = 0;
 
+            // iterate each product and
+            // check price-range conditions
             products.forEach((product) => {
                 if (product?.selling_price < 50) {
                     lessThan50++;
@@ -44,6 +51,7 @@ function ProductChart() {
     }, [])
 
 
+    // define data for bar chart
     const data = {
         labels: ["<=50", "50-100", "100-150", "150-200"],
         datasets: [{
@@ -68,6 +76,7 @@ function ProductChart() {
         }]
     }
 
+    // define properties of bar chart
     const options = {
         maintainAspectRatio: false,
         responsive: true,
