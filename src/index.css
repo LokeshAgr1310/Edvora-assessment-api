@@ -1,13 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-image: url("/public/background.jpg");
+  /* background-position: center center; */
+  background-repeat: no-repeat;
+  font-family: "Poppins", "sans-serif";
+  color: white;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* remove integer spin button */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@layer components {
+  .nav--link {
+    @apply flex items-center space-x-2 cursor-pointer;
+  }
+
+  .tab--active {
+    @apply text-sky-500 border-b-2 border-sky-500;
+  }
+
+  .input--id {
+    @apply block px-2.5 pb-2.5 pt-5 w-full text-sm rounded-t-lg text-gray-900 bg-gray-50 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 dark:bg-slate-900 focus:outline-none focus:ring-0 focus:border-blue-600;
+  }
+
+  .label--id {
+    @apply absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] left-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4;
+  }
+
+  .btn {
+    @apply bg-gradient-to-r text-sm tracking-wider from-blue-500 shadow-md border border-slate-200/5 transition-all duration-300 px-5 py-2 rounded-sm font-medium;
+  }
+}
+
+/* custom classes */
+.nav--link::after {
+  content: "";
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: white;
+  /* transform-origin: center left; */
+  transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+  transform: scaleX(0);
+  opacity: 0;
+}
+
+.nav--link:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.product--card {
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
